@@ -37,26 +37,28 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           title: 'Для лица',
         ),
       ),
-      body: Column(
-        children: [
-          ListTile(
-            title: Text(
-              "Все товары категории",
-              style: TextStyle(
-                color: Colors.red,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            ListTile(
+              title: Text(
+                "Все товары категории",
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+              trailing: IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.arrow_forward_ios_outlined,
+                  size: 15,
+                ),
               ),
             ),
-            trailing: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.arrow_forward_ios_outlined,
-                size: 15,
-              ),
-            ),
-          ),
-          Divider(color: Colors.black26),
-          CategoryListBuilder(),
-        ],
+            Divider(color: Colors.black26),
+            CategoryListBuilder(),
+          ],
+        ),
       ),
     );
   }

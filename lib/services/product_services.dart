@@ -6,6 +6,7 @@ import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shop_test_task_with_providers/models/category_model.dart';
+import 'package:shop_test_task_with_providers/models/product_model.dart';
 import 'package:shop_test_task_with_providers/services/api_endpoints.dart';
 
 class ProductServices {
@@ -35,13 +36,13 @@ class ProductServices {
         "Accept": "application/json",
         "Content-Type": 'application/json'
       },
-    ); 
+    );
     var dataa = jsonDecode(response.body);
+    const add = "?categoryId=1";
+    log.wtf(Uri.parse(ApiEndpoints.productList + add));
 
     var data = dataa['items'];
     log.d(dataa);
-    log.d(data);
-
 
     List<CategoryModel> _categoriesList = [];
 
@@ -51,8 +52,31 @@ class ProductServices {
     }
 
     return _categoriesList;
-
   }
 
-  // Future<
+  Future<List<ProductModel>> fetchProducts(
+      {required String categoryIdNumber}) async {
+    final response = await http.get(
+      Uri.parse(
+          "https://vue-study.skillbox.cc/api/products?categoryId=$categoryIdNumber"),
+      // Uri.parse(ApiEndpoints.product + "?categoryId=" + categoryIdNumber),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": 'application/json'
+      },
+    );
+    var dataa = jsonDecode(response.body);
+
+    var data = dataa['items'];
+    log.d(dataa);
+
+    List<ProductModel> _productList = [];
+
+    for (var fetchedProductList in data) {
+      ProductModel _productModel = ProductModel.fromJson(fetchedProductList);
+      _productList.add(_productModel);
+    }
+
+    return _productList;
+  }
 }

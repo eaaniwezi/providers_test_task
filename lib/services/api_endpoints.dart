@@ -3,7 +3,7 @@ class ApiEndpoints {
 
   static const String accessKey = "$baseUrl/users/accessKey"; //!get
   //*products
-  static const String productList = "$baseUrl/products"; //!get
+  static String productList = "$baseUrl/products?categoryId="; //!get
   static const String product = "$baseUrl/products/{id}"; //!get
   //*Categories
   static const String categoryList = "$baseUrl/productCategories"; //!get

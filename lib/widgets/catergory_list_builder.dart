@@ -54,9 +54,16 @@ class CategoryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final productProvider = Provider.of<ProductProviders>(context);
     return ListTile(
-      onTap: () {
-        print("object");
+      onTap: () async {
+        print(categoryModel.id.toString());
+        print(categoryModel.id.toString());
+        print(categoryModel.id.toString());
+        print(categoryModel.id.toString());
+        await productProvider.loadProducts(
+            catergoryIdNum: categoryModel.id.toString());
+        // print("object");
       },
       title: Text(
         categoryModel.title,
