@@ -23,7 +23,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     // hasAccessKey =
 
     // Provider.of<ProductProviders>(context, listen: false).hasAccessKey();
-    // Provider.of<ProductProviders>(context, listen: false).loadCategory();
+    Provider.of<ProductProviders>(context, listen: false).isCategoryFetched();
     super.initState();
   }
 

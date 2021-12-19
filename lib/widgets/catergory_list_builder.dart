@@ -11,22 +11,37 @@ class CategoryListBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     final productProvider =
         Provider.of<ProductProviders>(context, listen: false);
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const ClampingScrollPhysics(),
-      itemCount: productProvider.fetchedCategories.length,
-      separatorBuilder: (BuildContext context, int index) => const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8.0),
-        child: Divider(
-          color: Colors.black26,
-        ),
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        return CategoryView(
-          categoryModel: productProvider.fetchedCategories[index],
-        );
-      },
-    );
+    return productProvider.fetchedCategories.isNotEmpty
+        ? ListView.separated(
+            shrinkWrap: true,
+            physics: const ClampingScrollPhysics(),
+            itemCount: productProvider.fetchedCategories.length,
+            separatorBuilder: (BuildContext context, int index) =>
+                const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 8.0),
+              child: Divider(
+                color: Colors.black26,
+              ),
+            ),
+            itemBuilder: (BuildContext context, int index) {
+              return CategoryView(
+                categoryModel: productProvider.fetchedCategories[index],
+              );
+            },
+          )
+        : productProvider.fetchedCategories.isEmpty
+            ? const Center(
+                child: Text(
+                  "Error fetching Data",
+                  style: TextStyle(color: Colors.black),
+                ),
+              )
+            : const Center(
+                child: Text(
+                  "No Category Product List",
+                  style: TextStyle(color: Colors.black),
+                ),
+              );
   }
 }
 

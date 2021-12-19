@@ -50,8 +50,9 @@ class ProductServices {
       _categoriesList.add(_categoryModel);
     }
 
-
     return _categoriesList;
-    // return data['items'];
+
   }
+
+  // Future<
 }
