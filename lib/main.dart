@@ -8,7 +8,9 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => ProductProviders()),
+         ChangeNotifierProvider.value(
+                    value: ProductProviders.initialize()),
+        // ChangeNotifierProvider(create: (context) => ProductProviders()),
       ],
       child: const MyApp(),
     ),
