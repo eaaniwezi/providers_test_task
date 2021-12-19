@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 class AppBarWidget extends StatelessWidget {
   final String title;
   bool isNavigate = false;
+  bool isIcon = false;
+
   AppBarWidget({
     Key? key,
     required this.title,
     required this.isNavigate,
+    required this.isIcon,
   }) : super(key: key);
 
   @override
@@ -31,6 +34,17 @@ class AppBarWidget extends StatelessWidget {
         style: TextStyle(
             color: Colors.black54, fontSize: 20, fontWeight: FontWeight.w500),
       ),
+      actions: [
+        isIcon == false
+            ? Container()
+            : IconButton(
+                icon: Icon(
+                  Icons.search,
+                  color: Colors.black,
+                ),
+                onPressed: () {},
+              ),
+      ],
     );
   }
 }

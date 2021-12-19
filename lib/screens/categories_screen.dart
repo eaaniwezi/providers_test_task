@@ -35,7 +35,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         preferredSize: Size.fromHeight(50.0),
         child: AppBarWidget(
           title: 'Для лица',
-          isNavigate: false,
+          isNavigate: false, isIcon: false,
         ),
       ),
       body: SingleChildScrollView(
