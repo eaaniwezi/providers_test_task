@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 
 class AppBarWidget extends StatelessWidget {
   final String title;
-  const AppBarWidget({
+  bool isNavigate = false;
+  AppBarWidget({
     Key? key,
     required this.title,
+    required this.isNavigate,
   }) : super(key: key);
 
   @override
@@ -17,9 +19,11 @@ class AppBarWidget extends StatelessWidget {
           Icons.arrow_back_ios,
           color: Colors.black54,
         )),
-        onPressed: () {},
+        onPressed: () {
+          isNavigate == false ? null : Navigator.pop(context);
+        },
       ),
-      elevation: 0,
+      elevation: 1,
       backgroundColor: Colors.white,
       centerTitle: true,
       title: Text(

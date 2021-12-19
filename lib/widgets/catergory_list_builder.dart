@@ -1,8 +1,11 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:shop_test_task_with_providers/models/category_model.dart';
 import 'package:shop_test_task_with_providers/providers/product_providers.dart';
+import 'package:shop_test_task_with_providers/screens/product_screen.dart';
 
 class CategoryListBuilder extends StatelessWidget {
   const CategoryListBuilder({Key? key}) : super(key: key);
@@ -57,20 +60,28 @@ class CategoryView extends StatelessWidget {
     final productProvider = Provider.of<ProductProviders>(context);
     return ListTile(
       onTap: () async {
-        print(categoryModel.id.toString());
-        print(categoryModel.id.toString());
-        print(categoryModel.id.toString());
-        print(categoryModel.id.toString());
         await productProvider.loadProducts(
             catergoryIdNum: categoryModel.id.toString());
-        // print("object");
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProductScreen(
+                      categoryModel: categoryModel,
+                    )));
       },
       title: Text(
         categoryModel.title,
       ),
       trailing: IconButton(
-        onPressed: () {
-          print(categoryModel.title);
+        onPressed: () async {
+          await productProvider.loadProducts(
+              catergoryIdNum: categoryModel.id.toString());
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProductScreen(
+                        categoryModel: categoryModel,
+                      )));
         },
         icon: const Icon(
           Icons.arrow_forward_ios_outlined,
