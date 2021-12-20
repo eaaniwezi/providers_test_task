@@ -8,8 +8,8 @@ class ApiEndpoints {
   //*Categories
   static const String categoryList = "$baseUrl/productCategories"; //!get
   //*Cart
-  static const String cartList = "$baseUrl/baskets"; //!get
-  static const String addToCart = "$baseUrl/baskets/products"; //!post
+  static const String cartList = "$baseUrl/baskets?userAccessKey="; //!get
+  static const String addToCart = "$baseUrl/baskets/products?userAccessKey="; //!post
   static const String changeNumberOfItemInCart =
       "$baseUrl/baskets/products"; //!put
   static const String removeFromCart = "$baseUrl/baskets/products"; //!delete

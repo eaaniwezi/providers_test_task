@@ -15,15 +15,11 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
-  // final CategoryModel categoryModel;
 
-  // _CategoriesScreenState(this.categoryModel);
   @override
   void initState() {
-    // hasAccessKey =
-
-    // Provider.of<ProductProviders>(context, listen: false).hasAccessKey();
-    Provider.of<ProductProviders>(context, listen: false).isCategoryFetched();
+    // Provider.of<ProductProviders>(context, listen: false).loadBasketProduct();
+    // Provider.of<ProductProviders>(context, listen: false).isCategoryFetched();
     super.initState();
   }
 

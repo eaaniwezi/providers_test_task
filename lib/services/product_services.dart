@@ -1,10 +1,11 @@
-// ignore_for_file: unnecessary_new, prefer_const_constructors
+// ignore_for_file: unnecessary_new, prefer_const_constructors, avoid_print
 
 import 'dart:convert';
 
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shop_test_task_with_providers/models/basket_model.dart';
 import 'package:shop_test_task_with_providers/models/category_model.dart';
 import 'package:shop_test_task_with_providers/models/product_model.dart';
 import 'package:shop_test_task_with_providers/services/api_endpoints.dart';
@@ -12,22 +13,6 @@ import 'package:shop_test_task_with_providers/services/api_endpoints.dart';
 class ProductServices {
   var log = Logger();
   final FlutterSecureStorage storage = new FlutterSecureStorage();
-
-  Future<String> getUserAccessKey() async {
-    final response = await http.get(
-      Uri.parse(ApiEndpoints.accessKey),
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": 'application/json'
-      },
-    );
-    final accessKey = jsonDecode(response.body);
-    final key = accessKey['accessKey'];
-    //*storing the access-key
-    await storage.write(key: 'accessKey', value: key);
-    log.d(accessKey);
-    return key;
-  }
 
   Future<List<CategoryModel>> fetchAllCategories() async {
     final response = await http.get(
@@ -38,11 +23,7 @@ class ProductServices {
       },
     );
     var dataa = jsonDecode(response.body);
-    const add = "?categoryId=1";
-    log.wtf(Uri.parse(ApiEndpoints.productList + add));
-
     var data = dataa['items'];
-    log.d(dataa);
 
     List<CategoryModel> _categoriesList = [];
 
@@ -66,9 +47,7 @@ class ProductServices {
       },
     );
     var dataa = jsonDecode(response.body);
-
     var data = dataa['items'];
-    log.d(dataa);
 
     List<ProductModel> _productList = [];
 
@@ -78,5 +57,84 @@ class ProductServices {
     }
 
     return _productList;
+  }
+
+  Future<bool> addToCart(
+      {required String productId, required String quantity}) async {
+    Map cartRequirement = {
+      "productId": productId,
+      "quantity": quantity,
+    };
+
+    var savedAccessKey = await storage.read(key: "accessKey");
+    print(savedAccessKey);
+
+    try {
+      if (savedAccessKey == null) {
+        final response = await http.get(
+          Uri.parse(ApiEndpoints.accessKey),
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": 'application/json'
+          },
+        );
+        final accessKey = jsonDecode(response.body);
+        savedAccessKey = accessKey['accessKey'];
+        //*storing the access-key
+        await storage.write(key: 'accessKey', value: savedAccessKey);
+      }
+      final response = await http.post(
+        Uri.parse(ApiEndpoints.addToCart + savedAccessKey!),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": 'application/json',
+        },
+        body: json.encode(cartRequirement),
+      );
+      print(response.statusCode.toString() + "..statusCode.toString()");
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return true;
+      }
+    } catch (e) {
+      return false;
+    }
+    return false;
+  }
+
+  Future<List<BasketModel>> fetchBasketItems() async {
+    var savedAccessKey = await storage.read(key: "accessKey");
+    print(savedAccessKey);
+
+    if (savedAccessKey == null) {
+      final response = await http.get(
+        Uri.parse(ApiEndpoints.accessKey),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": 'application/json'
+        },
+      );
+      final accessKey = jsonDecode(response.body);
+      savedAccessKey = accessKey['accessKey'];
+      //*storing the access-key
+      await storage.write(key: 'accessKey', value: savedAccessKey);
+    }
+    final response = await http.get(
+      Uri.parse(ApiEndpoints.cartList + savedAccessKey!),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": 'application/json',
+      },
+    );
+    print(response.statusCode.toString() + "..statusCode.toStbasketring()");
+    var dataa = jsonDecode(response.body);
+    var data = dataa['items'];
+
+    List<BasketModel> _basketProductList = [];
+
+    for (var fetchedBasketProductList in data) {
+      BasketModel _basketModel = BasketModel.fromJson(fetchedBasketProductList);
+      _basketProductList.add(_basketModel);
+    }
+    return _basketProductList;
   }
 }

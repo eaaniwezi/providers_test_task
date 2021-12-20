@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -54,16 +55,14 @@ class _ProductViewState extends State<ProductView> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(10.0),
       child: Column(
         children: [
           Expanded(
             child: Stack(
               children: [
-                Container(
-                  // color: Colors.red,
+                SizedBox(
                   height: MediaQuery.of(context).size.height * 0.4,
-                  // child: ClipRRect(child: Image.asset,),
                   child: AspectRatio(
                     aspectRatio: 16,
                     child: Hero(
@@ -85,20 +84,40 @@ class _ProductViewState extends State<ProductView> {
               ],
             ),
           ),
-          // Text(widget.productModel.image!.file!.url),
-          Row(
-            children: [
-              Text(
-                NumberFormat.decimalPattern()
-                        .format(widget.productModel.price) +
-                    " ₽",
-                style: TextStyle(fontWeight: FontWeight.w500),
-              ),
-              Spacer(),
-              SvgPicture.asset(
-                "icons/cart.svg",
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            child: Row(
+              children: [
+                Text(
+                  NumberFormat.decimalPattern()
+                          .format(widget.productModel.price) +
+                      " ₽",
+                  style: TextStyle(fontWeight: FontWeight.w500),
+                ),
+                Spacer(),
+                InkWell(
+                  onTap: () async {
+                    var quantity = '1';
+                    final productProvider =
+                        Provider.of<ProductProviders>(context, listen: false);
+                    bool successfullAdded = await productProvider.isAdded(
+                      productId: widget.productModel.id.toString(),
+                      quantity: quantity,
+                    );
+
+                    if (successfullAdded) {
+                      Fluttertoast.showToast(msg: "Успешно добавленный!");
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: "Ошибка при добавлении в корзину");
+                    }
+                  },
+                  child: SvgPicture.asset(
+                    "icons/cart.svg",
+                  ),
+                ),
+              ],
+            ),
           ),
           Text(
             widget.productModel.title,

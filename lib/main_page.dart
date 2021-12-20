@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:provider/provider.dart';
+import 'package:shop_test_task_with_providers/providers/product_providers.dart';
 import 'package:shop_test_task_with_providers/screens/cart_screen.dart';
 import 'package:shop_test_task_with_providers/screens/categories_screen.dart';
 import 'package:shop_test_task_with_providers/screens/favorities_screen.dart';
@@ -44,6 +46,7 @@ class _MainPageState extends State<MainPage> {
       profileScreen,
     ];
     currentPage = homeScreen;
+     Provider.of<ProductProviders>(context, listen: false).loadBasketProduct();
   }
 
   PersistentTabController _controller =
@@ -51,6 +54,8 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final productProvider =
+        Provider.of<ProductProviders>(context, listen: false);
     return PersistentTabView(
       context,
       controller: _controller,
@@ -58,8 +63,6 @@ class _MainPageState extends State<MainPage> {
       onItemSelected: (int page) {
         setState(() {
           currentTabIndex = page;
-          print(currentTabIndex.toString() +
-              ' this is the second currentTabIndex page');
         });
       },
       items: [
@@ -95,9 +98,38 @@ class _MainPageState extends State<MainPage> {
             inactiveColorPrimary: Colors.black54),
         PersistentBottomNavBarItem(
             iconSize: 30,
-            icon: SvgPicture.asset(
-              "icons/cart.svg",
-              color: currentTabIndex == 3 ? Colors.black : Colors.black54,
+            icon: Stack(
+              children: [
+                SvgPicture.asset(
+                  "icons/cart.svg",
+                  color: currentTabIndex == 3 ? Colors.black : Colors.black54,
+                ),
+                Positioned(
+                  right: 0,
+                  child: Container(
+                    padding: EdgeInsets.all(1),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    constraints: BoxConstraints(
+                      minWidth: 12,
+                      minHeight: 12,
+                    ),
+                    child: DefaultTextStyle(
+                      style: TextStyle(),
+                      child: Text(
+                        productProvider.fetchedBasketProducts.length.toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 8,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                )
+              ],
             ),
             title: ("Корзина"),
             textStyle: TextStyle(fontSize: 10),
