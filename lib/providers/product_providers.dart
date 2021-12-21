@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, unnecessary_null_comparison
 
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
@@ -11,6 +11,10 @@ import 'package:shop_test_task_with_providers/services/product_services.dart';
 class ProductProviders with ChangeNotifier {
   var log = Logger();
   List<CategoryModel> fetchedCategories = [];
+
+  // List<CategoryModel> savedCategories = [];
+  // List<CategoryModel> checkCategories = [];
+
   List<ProductModel> fetchedProducts = [];
   List<ProductModel> fetchedAllProducts = [];
   List<BasketModel> fetchedBasketProducts = [];
@@ -24,13 +28,41 @@ class ProductProviders with ChangeNotifier {
   }
 
   //*
-  // Future<
+  // Future<int> fetchSavedCategories() async {
+  //   savedCategories = await _productServices.fetchSavedCategories();
+  //   print(savedCategories.length.toString() + " savedCategories");
+  //   notifyListeners();
+  //   return savedCategories.length;
+  // }
+
+  // Future<int> fetchAllCategories() async {
+  //   checkCategories = await _productServices.fetchAllCategories();
+  //   print(checkCategories.length.toString() + " checkCategories");
+  //   notifyListeners();
+  //   return checkCategories.length;
+  // }
+
+  // Future loadCategory() async {
+  //   log.d(savedCategories.length);
+  //   final prefs = await SharedPreferences.getInstance();
+  //   final getList = prefs.getString("list");
+  //   if (getList == null) {
+  //     fetchedCategories = await _productServices.fetchAllCategories();
+  //   } else if ((getList != null) &&
+  //       (fetchSavedCategories() == fetchAllCategories())) {
+  //     fetchedCategories = await _productServices.fetchSavedCategories();
+  //   } else if ((getList != null) &&
+  //       (fetchSavedCategories() != fetchAllCategories())) {
+  //     fetchedCategories = await _productServices.fetchAllCategories();
+  //   }
+  //   notifyListeners();
+  // }
 
 //*
   Future loadCategory() async {
     final prefs = await SharedPreferences.getInstance();
 
-    final getList = await prefs.getString("list");
+    final getList = prefs.getString("list");
 
     if (getList == null) {
       fetchedCategories = await _productServices.fetchAllCategories();
