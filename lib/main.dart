@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import 'injection_container.dart' as di;
 import 'package:shop_test_task_with_providers/main_page.dart';
@@ -11,6 +12,7 @@ import 'package:shop_test_task_with_providers/screens/splash_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
+   await GetStorage.init();
   runApp(
     MultiProvider(
       providers: [
@@ -49,7 +51,7 @@ class MyApp extends StatelessWidget {
                 return SlapshScreen();
               case ConnectionState.done:
                 if (snapshot.hasError) {
-                  return Text('Error');
+                  return SlapshScreen();
                 } else {
                   return MainPage();
                 }

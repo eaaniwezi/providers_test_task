@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop_test_task_with_providers/models/basket_model.dart';
 import 'package:shop_test_task_with_providers/models/category_model.dart';
 import 'package:shop_test_task_with_providers/models/product_model.dart';
@@ -22,9 +23,21 @@ class ProductProviders with ChangeNotifier {
     await loadBasketProduct();
   }
 
+  //*
+  // Future<
+
 //*
- Future loadCategory() async {
-    fetchedCategories = await _productServices.fetchAllCategories();
+  Future loadCategory() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final getList = await prefs.getString("list");
+
+    if (getList == null) {
+      fetchedCategories = await _productServices.fetchAllCategories();
+    } else {
+      fetchedCategories = await _productServices.fetchSavedCategories();
+    }
+
     notifyListeners();
   }
 
@@ -34,11 +47,10 @@ class ProductProviders with ChangeNotifier {
         await _productServices.fetchProducts(categoryIdNumber: catergoryIdNum);
     notifyListeners();
   }
+
 //*
   Future loadAllProducts({required int limit}) async {
-    fetchedAllProducts =
-        await _productServices.fetchAllProducts(limit: limit);
-        print(fetchedAllProducts.length.toString() + "  fetchedAllProducts");
+    fetchedAllProducts = await _productServices.fetchAllProducts(limit: limit);
     notifyListeners();
   }
 
@@ -49,8 +61,6 @@ class ProductProviders with ChangeNotifier {
         productId: productId, quantity: quantity);
     if (isProductAdded == true) {
       fetchedBasketProducts = await _productServices.fetchBasketItems();
-      print(fetchedBasketProducts.length.toString() +
-          " this is the lenth in to add");
       notifyListeners();
       return true;
     } else {
@@ -62,8 +72,6 @@ class ProductProviders with ChangeNotifier {
 //*
   Future loadBasketProduct() async {
     fetchedBasketProducts = await _productServices.fetchBasketItems();
-    print(fetchedBasketProducts.length.toString() +
-        " this is the number off cart iterm");
     notifyListeners();
   }
 

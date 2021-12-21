@@ -1,7 +1,8 @@
-// ignore_for_file: unnecessary_new, prefer_const_constructors, avoid_print
+// ignore_for_file: unnecessary_new, prefer_const_constructors, avoid_print, await_only_futures
 
 import 'dart:convert';
 
+import 'package:get_storage/get_storage.dart';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -14,6 +15,7 @@ import 'package:shop_test_task_with_providers/services/api_endpoints.dart';
 class ProductServices {
   var log = Logger();
   final FlutterSecureStorage storage = new FlutterSecureStorage();
+  final box = GetStorage();
 
   Future<List<CategoryModel>> fetchAllCategories() async {
     final prefs = await SharedPreferences.getInstance();
@@ -27,6 +29,8 @@ class ProductServices {
     );
     var dataa = jsonDecode(response.body);
     var data = dataa['items'];
+    print("getList is null");
+    await prefs.setString("list", json.encode(data));
 
     List<CategoryModel> _categoriesList = [];
 
@@ -35,9 +39,23 @@ class ProductServices {
       _categoriesList.add(_categoryModel);
     }
 
-    final _set = _categoriesList.toSet().toList();
+    return _categoriesList;
+  }
 
-    //  await prefs.setStringList('savedCategoryList', _set)
+  Future<List<CategoryModel>> fetchSavedCategories() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final getList = await prefs.getString("list");
+    final decodedList = json.decode(getList!);
+
+    print("getList is not null");
+
+    List<CategoryModel> _categoriesList = [];
+
+    for (var fetchedList in decodedList) {
+      CategoryModel _categoryModel = CategoryModel.fromJson(fetchedList);
+      _categoriesList.add(_categoryModel);
+    }
 
     return _categoriesList;
   }
@@ -67,7 +85,6 @@ class ProductServices {
   }
 
   Future<List<ProductModel>> fetchAllProducts({required int limit}) async {
-
     final response = await http.get(
       Uri.parse("https://vue-study.skillbox.cc/api/products?limit=$limit"),
       headers: {
