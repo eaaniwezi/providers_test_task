@@ -65,7 +65,6 @@ class ProductServices {
     final response = await http.get(
       Uri.parse(
           "https://vue-study.skillbox.cc/api/products?categoryId=$categoryIdNumber"),
-      // Uri.parse(ApiEndpoints.product + "?categoryId=" + categoryIdNumber),
       headers: {
         "Accept": "application/json",
         "Content-Type": 'application/json'
