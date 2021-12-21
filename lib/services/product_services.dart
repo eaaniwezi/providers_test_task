@@ -16,8 +16,8 @@ class ProductServices {
   final FlutterSecureStorage storage = new FlutterSecureStorage();
 
   Future<List<CategoryModel>> fetchAllCategories() async {
-     final prefs = await SharedPreferences.getInstance();
-    
+    final prefs = await SharedPreferences.getInstance();
+
     final response = await http.get(
       Uri.parse(ApiEndpoints.categoryList),
       headers: {
@@ -35,7 +35,7 @@ class ProductServices {
       _categoriesList.add(_categoryModel);
     }
 
-        final _set = _categoriesList.toSet().toList();
+    final _set = _categoriesList.toSet().toList();
 
     //  await prefs.setStringList('savedCategoryList', _set)
 
@@ -48,6 +48,28 @@ class ProductServices {
       Uri.parse(
           "https://vue-study.skillbox.cc/api/products?categoryId=$categoryIdNumber"),
       // Uri.parse(ApiEndpoints.product + "?categoryId=" + categoryIdNumber),
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": 'application/json'
+      },
+    );
+    var dataa = jsonDecode(response.body);
+    var data = dataa['items'];
+
+    List<ProductModel> _productList = [];
+
+    for (var fetchedProductList in data) {
+      ProductModel _productModel = ProductModel.fromJson(fetchedProductList);
+      _productList.add(_productModel);
+    }
+
+    return _productList;
+  }
+
+  Future<List<ProductModel>> fetchAllProducts({required int limit}) async {
+
+    final response = await http.get(
+      Uri.parse("https://vue-study.skillbox.cc/api/products?limit=$limit"),
       headers: {
         "Accept": "application/json",
         "Content-Type": 'application/json'

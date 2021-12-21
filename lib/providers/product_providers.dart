@@ -11,17 +11,19 @@ class ProductProviders with ChangeNotifier {
   var log = Logger();
   List<CategoryModel> fetchedCategories = [];
   List<ProductModel> fetchedProducts = [];
+  List<ProductModel> fetchedAllProducts = [];
   List<BasketModel> fetchedBasketProducts = [];
   final ProductServices _productServices = ProductServices();
 
   Future<void> initialize() async {
     await loadCategory();
+    await loadAllProducts(limit: 5);
     await loadProducts(catergoryIdNum: "");
     await loadBasketProduct();
   }
 
 //*
-  loadCategory() async {
+ Future loadCategory() async {
     fetchedCategories = await _productServices.fetchAllCategories();
     notifyListeners();
   }
@@ -30,6 +32,13 @@ class ProductProviders with ChangeNotifier {
   Future loadProducts({required String catergoryIdNum}) async {
     fetchedProducts =
         await _productServices.fetchProducts(categoryIdNumber: catergoryIdNum);
+    notifyListeners();
+  }
+//*
+  Future loadAllProducts({required int limit}) async {
+    fetchedAllProducts =
+        await _productServices.fetchAllProducts(limit: limit);
+        print(fetchedAllProducts.length.toString() + "  fetchedAllProducts");
     notifyListeners();
   }
 

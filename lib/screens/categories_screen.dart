@@ -1,9 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:shop_test_task_with_providers/models/category_model.dart';
-import 'package:shop_test_task_with_providers/providers/product_providers.dart';
+import 'package:shop_test_task_with_providers/screens/all_product_screen.dart';
 import 'package:shop_test_task_with_providers/widgets/app_bar_widget.dart';
 import 'package:shop_test_task_with_providers/widgets/catergory_list_builder.dart';
 
@@ -15,14 +13,6 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
-
-  @override
-  void initState() {
-    // Provider.of<ProductProviders>(context, listen: false).loadBasketProduct();
-    // Provider.of<ProductProviders>(context, listen: false).isCategoryFetched();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,13 +21,16 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         preferredSize: Size.fromHeight(50.0),
         child: AppBarWidget(
           title: 'Для лица',
-          isNavigate: false, isIcon: false,
+          isNavigate: false,
+          isIcon: false,
         ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             ListTile(
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AllProductScreen())),
               title: Text(
                 "Все товары категории",
                 style: TextStyle(
@@ -45,7 +38,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 ),
               ),
               trailing: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AllProductScreen()));
+                },
                 icon: const Icon(
                   Icons.arrow_forward_ios_outlined,
                   size: 15,

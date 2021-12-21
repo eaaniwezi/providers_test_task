@@ -5,6 +5,7 @@ class ApiEndpoints {
   //*products
   static String productList = "$baseUrl/products?categoryId="; //!get
   static const String product = "$baseUrl/products/{id}"; //!get
+  static const String allProducts = "$baseUrl/products?limit="; //!get
   //*Categories
   static const String categoryList = "$baseUrl/productCategories"; //!get
   //*Cart
