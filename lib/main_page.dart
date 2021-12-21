@@ -46,7 +46,6 @@ class _MainPageState extends State<MainPage> {
       profileScreen,
     ];
     currentPage = homeScreen;
-     Provider.of<ProductProviders>(context, listen: false).loadBasketProduct();
   }
 
   PersistentTabController _controller =
@@ -55,7 +54,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     final productProvider =
-        Provider.of<ProductProviders>(context, listen: false);
+        Provider.of<ProductProviders>(context);
     return PersistentTabView(
       context,
       controller: _controller,

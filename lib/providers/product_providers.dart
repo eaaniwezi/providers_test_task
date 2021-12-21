@@ -17,7 +17,6 @@ class ProductProviders with ChangeNotifier {
   ProductProviders.initialize() {
     loadCategory();
     loadProducts(catergoryIdNum: "");
-    loadBasketProduct();
   }
 
 //*
@@ -38,6 +37,8 @@ class ProductProviders with ChangeNotifier {
     bool isProductAdded =
         await _productServices.addToCart(productId: productId, quantity: quantity);
     if (isProductAdded == true) {
+    fetchedBasketProducts =  await _productServices.fetchBasketItems();
+    print(fetchedBasketProducts.length.toString() + " this is the lenth in to add");
       notifyListeners();
       return true;
     } else {
@@ -47,10 +48,11 @@ class ProductProviders with ChangeNotifier {
   }
 
 //*
-   loadBasketProduct() async {
-    fetchedBasketProducts = await _productServices.fetchBasketItems();
-    notifyListeners();
-  }
+  //  loadBasketProduct() async {
+  //   fetchedBasketProducts = await _productServices.fetchBasketItems();
+  //   print(fetchedBasketProducts.length.toString() + " this is the number off cart iterm");
+  //   notifyListeners();
+  // }
 
 //!not needed
   Future<bool> isCategoryFetched() async {

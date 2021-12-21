@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:logger/logger.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop_test_task_with_providers/models/basket_model.dart';
 import 'package:shop_test_task_with_providers/models/category_model.dart';
 import 'package:shop_test_task_with_providers/models/product_model.dart';
@@ -15,6 +16,8 @@ class ProductServices {
   final FlutterSecureStorage storage = new FlutterSecureStorage();
 
   Future<List<CategoryModel>> fetchAllCategories() async {
+     final prefs = await SharedPreferences.getInstance();
+    
     final response = await http.get(
       Uri.parse(ApiEndpoints.categoryList),
       headers: {
@@ -31,6 +34,10 @@ class ProductServices {
       CategoryModel _categoryModel = CategoryModel.fromJson(fetchedList);
       _categoriesList.add(_categoryModel);
     }
+
+        final _set = _categoriesList.toSet().toList();
+
+    //  await prefs.setStringList('savedCategoryList', _set)
 
     return _categoriesList;
   }
