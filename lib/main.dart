@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'injection_container.dart' as di;
 import 'package:shop_test_task_with_providers/main_page.dart';
 import 'package:shop_test_task_with_providers/models/category_model.dart';
 import 'package:shop_test_task_with_providers/providers/product_providers.dart';
@@ -9,10 +10,11 @@ import 'package:shop_test_task_with_providers/screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await di.init();
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: ProductProviders.initialize()),
+        ChangeNotifierProvider.value(value: di.sl.get<ProductProviders>()),
         // ChangeNotifierProvider(create: (context) => ProductProviders()),
       ],
       child: const MyApp(),

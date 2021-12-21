@@ -14,9 +14,10 @@ class ProductProviders with ChangeNotifier {
   List<BasketModel> fetchedBasketProducts = [];
   final ProductServices _productServices = ProductServices();
 
-  ProductProviders.initialize() {
-    loadCategory();
-    loadProducts(catergoryIdNum: "");
+  Future<void> initialize() async {
+    await loadCategory();
+    await loadProducts(catergoryIdNum: "");
+    await loadBasketProduct();
   }
 
 //*
@@ -33,12 +34,14 @@ class ProductProviders with ChangeNotifier {
   }
 
 //*
-  Future<bool> isAdded({required String productId, required String quantity }) async {
-    bool isProductAdded =
-        await _productServices.addToCart(productId: productId, quantity: quantity);
+  Future<bool> isAdded(
+      {required String productId, required String quantity}) async {
+    bool isProductAdded = await _productServices.addToCart(
+        productId: productId, quantity: quantity);
     if (isProductAdded == true) {
-    fetchedBasketProducts =  await _productServices.fetchBasketItems();
-    print(fetchedBasketProducts.length.toString() + " this is the lenth in to add");
+      fetchedBasketProducts = await _productServices.fetchBasketItems();
+      print(fetchedBasketProducts.length.toString() +
+          " this is the lenth in to add");
       notifyListeners();
       return true;
     } else {
@@ -48,11 +51,12 @@ class ProductProviders with ChangeNotifier {
   }
 
 //*
-  //  loadBasketProduct() async {
-  //   fetchedBasketProducts = await _productServices.fetchBasketItems();
-  //   print(fetchedBasketProducts.length.toString() + " this is the number off cart iterm");
-  //   notifyListeners();
-  // }
+  Future loadBasketProduct() async {
+    fetchedBasketProducts = await _productServices.fetchBasketItems();
+    print(fetchedBasketProducts.length.toString() +
+        " this is the number off cart iterm");
+    notifyListeners();
+  }
 
 //!not needed
   Future<bool> isCategoryFetched() async {
